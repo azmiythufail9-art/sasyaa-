@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sasyaa Story</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000}
+#story{position:relative;width:100vw;height:100dvh;overflow:hidden;background:#000}
+.page{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .28s ease, transform .28s ease;
+  transform:translateX(22px);
+  background:#000;
+}
+.page.active{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+.page img{
+  width:100%;height:100%;
+  object-fit:contain;
+  object-position:center;
+  display:block;
+  user-select:none;-webkit-user-drag:none;
+}
+.next,.choice{
+  position:absolute;z-index:5;
+  border:0;background:transparent;padding:0;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+}
+.next{left:5%;right:5%;bottom:0;height:13%}
+.choice{left:7%;right:7%;height:9%}
+.choice.a{bottom:14%}.choice.b{bottom:4%}
+#msg{
+  display:none;position:absolute;z-index:9;left:50%;bottom:2%;
+  transform:translateX(-50%);
+  padding:8px 14px;border-radius:999px;
+  background:rgba(0,0,0,.75);color:white;
+  font:13px Arial,sans-serif;white-space:nowrap;
+}
+#story.selected #msg{display:block}
+@media (prefers-reduced-motion:reduce){.page{transition:none}}
+</style>
+</head>
+<body>
+<main id="story" aria-label="Sasyaa story">
+<section class="page" data-page="1"><img src="assets/page1.png" alt="Sasyaa halaman 1"></section>
+<section class="page" data-page="2"><img src="assets/page2.png" alt="Sasyaa halaman 2"></section>
+<section class="page" data-page="3"><img src="assets/page3.png" alt="Sasyaa halaman 3"></section>
+<section class="page" data-page="4"><img src="assets/page4.png" alt="Sasyaa halaman 4"></section>
+<section class="page" data-page="5"><img src="assets/page5.png" alt="Sasyaa halaman 5"></section>
+<section class="page" data-page="6"><img src="assets/page6.png" alt="Sasyaa halaman 6"></section>
+<section class="page" data-page="7"><img src="assets/page7.png" alt="Sasyaa halaman 7"></section>
+<section class="page" data-page="8"><img src="assets/page8.png" alt="Sasyaa halaman 8"></section>
+<section class="page" data-page="9"><img src="assets/page9.png" alt="Sasyaa halaman 9"></section>
+<section class="page" data-page="10"><img src="assets/page10.png" alt="Sasyaa halaman 10"></section>
+<button id="next" class="next" type="button" aria-label="Lanjut"></button>
+<button id="a" class="choice a" type="button" aria-label="Masih boleh" hidden></button>
+<button id="b" class="choice b" type="button" aria-label="Aku butuh waktu dulu" hidden></button>
+<div id="msg" aria-live="polite"></div>
+</main>
+<script>
+(() => {
+ const root=document.getElementById('story');
+ const pages=[...root.querySelectorAll('.page')];
+ const next=document.getElementById('next');
+ const a=document.getElementById('a');
+ const b=document.getElementById('b');
+ const msg=document.getElementById('msg');
+ let n=1;
+
+ function show(i){
+   n=Math.max(1,Math.min(10,i));
+   pages.forEach((p,k)=>p.classList.toggle('active',k===n-1));
+   const last=n===10;
+   next.hidden=last;
+   a.hidden=!last;
+   b.hidden=!last;
+   root.classList.remove('selected');
+   msg.textContent='';
+ }
+ next.addEventListener('click',()=>show(n+1));
+ a.addEventListener('click',()=>{
+   msg.textContent='Masih boleh ♡';
+   root.classList.add('selected');
+ });
+ b.addEventListener('click',()=>{
+   msg.textContent='Aku butuh waktu dulu 😢';
+   root.classList.add('selected');
+ });
+ show(1);
+})();
+</script>
+</body>
+</html>
